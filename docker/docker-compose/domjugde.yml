@@ -1,0 +1,70 @@
+version: '3.9'
+services:
+  db:
+    image: mariadb
+    container_name: mysql
+    hostname: "db"
+    restart: always
+    volumes:
+      - ./dom_sql:/var/lib/mysql:Z
+    networks:
+      - dom_stack
+    environment:
+      - MARIADB_ROOT_PASSWORD=${db_admin_password}
+      - MYSQL_USER=${db_user}
+      - MYSQL_PASSWORD=${db_password}
+      - MYSQL_DATABASE=${database}
+  judge:
+    image: domjudge/domserver
+    container_name: domserver
+    hostname: "judge"
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - CONTAINER_TIMEZONE=Etc/GMT
+      - MYSQL_HOST=db
+      - MYSQL_ROOT_PASSWORD=${db_admin_password}
+      - MYSQL_USER=${db_user}
+      - MYSQL_PASSWORD=${db_password}
+      - MYSQL_DATABASE=${database}
+    labels:
+      # Frontend
+      - "traefik.enable=true"
+      - "traefik.http.routers.keppni.rule=Host(`keppni.einardarri.is`)"
+      - "traefik.http.routers.keppni.entrypoints=https"
+      - "traefik.http.services.keppni.loadbalancer.server.port=80"
+      - "traefik.http.routers.keppni.tls=true"
+      - "traefik.docker.network=proxy"
+    networks:
+      - dom_stack
+      - proxy
+  runner:
+    image: domjudge/judgehost
+    container_name: runner
+    hostname: "runner"
+    restart: always
+    privileged: true
+    networks:
+      - dom_stack
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+    depends_on:
+      - db
+      - judge
+    environment:
+      - CONTAINER_TIMEZONE=Etc/GMT
+      - DOMSERVER_BASEURL=judge/
+      - JUDGEDAEMON_USERNAME=${runner_name}
+      - JUDGEDAEMON_PASSWORD=${runner_api_password}
+
+
+volumes:
+  dom_sql:
+  runner:
+
+
+networks:
+  dom_stack:
+  proxy:
+    external: true
