@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  minio:
+    image: minio/minio
+    hostname: "minio"
+    container_name: minio
+    volumes:
+      - minio:/minio_files
+  # Overrides default command so things don't shut down after the process ends.
+    command: 'minio server /minio_files --console-address ":9001"'
+    #command: minio server start
+    environment:
+      MINIO_ROOT_USER : ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD : ${MINIO_ROOT_PASSWORD}
+    # expose ports
+    networks:
+      - proxy
+    ports:
+      - 9000:9000
+      - 9001:9001
+    labels:
+      # Frontend
+      - "traefik.enable=true"
+      - "traefik.http.routers.minio.rule=Host(`minio.einardarri.is`)"
+      - "traefik.http.routers.minio.entrypoints=https"
+      - "traefik.http.services.minio.loadbalancer.server.port=9001"
+      - "traefik.http.routers.minio.tls=true"
+
+
+volumes:
+  minio:
+
+
+networks:
+  proxy:
+    external: true
