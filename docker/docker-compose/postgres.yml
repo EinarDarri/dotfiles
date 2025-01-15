@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - zpostgress_network
+    environment:
+      POSTGRES_USER: ${postgres_user_name}
+      POSTGRES_PASSWORD: ${postgres_user_password}
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart : always
+    networks:
+      - zpostgress_network
+      - proxy
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${pgadmin_user_email}
+      PGADMIN_DEFAULT_PASSWORD : ${pgadmin_password}
+    labels:
+      # Frontend
+      - "traefik.enable=true"
+      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.einardarri.is`)"
+      - "traefik.http.routers.pgadmin.entrypoints=https"
+      - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
+      - "traefik.http.routers.pgadmin.tls=true"
+      - "traefik.docker.network=proxy"
+
+
+volumes:
+  postgres-data:
+
+networks:
+  zpostgress_network:
+  proxy:
+    external: true
+
+
