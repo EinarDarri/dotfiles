@@ -3,6 +3,7 @@ function vs() { code $1 ;exit; }
 alias py="python3.13"
 alias pip="py -m pip"
 alias unittest="py -m unittest"
+alias shit="git"
 
 function run(){
 	if [ $1 == *.sh ]; then 
