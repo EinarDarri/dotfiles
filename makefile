@@ -6,3 +6,6 @@ remove:
 link: remove
 	@ln -t ~ bash/.bash_aliases
 	@ln -t ~ bash/.bashrc
+
+install:
+	@sh bash/install.sh
