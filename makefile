@@ -8,4 +8,4 @@ link: remove
 	@ln -t ~ bash/.bashrc
 
 install:
-	@sh bash/install.sh
+	@sh bash/installs.sh

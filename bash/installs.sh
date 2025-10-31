@@ -7,3 +7,5 @@ sudo apt install bat
 
 # mesurment tool for programing (line count and file size)
 sudo apt install cloc
+
+sudo apt install neofetch
