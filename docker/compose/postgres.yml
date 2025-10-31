@@ -13,6 +13,12 @@ services:
     environment:
       POSTGRES_USER: ${postgres_user_name}
       POSTGRES_PASSWORD: ${postgres_user_password}
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
