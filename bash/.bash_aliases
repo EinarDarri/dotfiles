@@ -7,7 +7,7 @@ alias py="python3.13"
 alias pip="py -m pip"
 alias unittest="py -m unittest"
 alias shit="git"
-alias cat="batcat -p"
+alias cat="batcat -P"
 
 function run() {
   if [ $1 == *.sh ]; then
