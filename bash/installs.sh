@@ -1,11 +1,15 @@
 #!/bin/bash
 
 # install apt packages I want to have
+sudo apt install -y bind9-dnsutils 
 
 # batcat fany coloured cat in terminal
-sudo apt install bat
+sudo apt install -y bat
 
 # mesurment tool for programing (line count and file size)
-sudo apt install cloc
+sudo apt install -y cloc
 
-sudo apt install neofetch
+sudo apt install -y neofetch
+
+# install clang 
+sudo apt install -y clang build-essential libstdc++-14-dev
