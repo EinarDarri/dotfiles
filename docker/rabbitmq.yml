@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  rabbit:
+    image: rabbitmq:4.1.5-management-alpine
+    container_name: rabbit
+    hostname: rabbit
+    restart: always
+    ports:
+      - "5672:5672" # message queue port
+      - "8080:15672" # management port
+    volumes:
+      - rabbit-data:/var/lib/rabbitmq
+    networks:
+      - proxy
+    environment:
+      RABBITMQ_DEFAULT_USER: ${rabbit_user_name}
+      RABBITMQ_DEFAULT_PASS: ${rabbit_user_password}
+    labels:
+      # Frontend
+      - "traefik.enable=true"
+      - "traefik.http.routers.rabbit.rule=Host(`rabbit.einardarri.is`)"
+      - "traefik.http.routers.rabbit.entrypoints=https"
+      - "traefik.http.services.rabbit.loadbalancer.server.port=15672"
+      - "traefik.http.routers.rabbit.tls=true"
+      - "traefik.docker.network=proxy"
+
+volumes:
+  rabbit-data:
+
+networks:
+  proxy:
+    external: true
+
+
