@@ -15,3 +15,8 @@ sudo apt install -y neofetch
 
 # install clang 
 sudo apt install -y clang build-essential libstdc++-14-dev
+
+# install wireshark and setup so I can run without root
+sudo apt install -y wireshark
+sudo adduser $USER wireshark
+sudo chmod +x /usr/bin/dumpcap
