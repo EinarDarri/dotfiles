@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#add deadsnake repo for python
+sudo add-apt-repository ppa:deadsnakes/ppa
+
 sudo apt update
 
 # install apt packages I want to have
