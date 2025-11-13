@@ -6,6 +6,7 @@ function vs() {
 alias shit="git"
 alias bcat="batcat -P"
 alias bat="bcat"
+alias :q=exit
 
 function run() {
   if [ $1 == *.sh ]; then
